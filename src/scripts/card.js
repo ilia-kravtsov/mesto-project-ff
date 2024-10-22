@@ -1,12 +1,10 @@
-import { showImagePopup } from '../index.js';
-
 const cardTemplate = document.querySelector('#card-template').content;
 
 export function createCard(
   cardData,
+  showImagePopup,
   deleteCardCallback = deleteCard,
   likeCardCallback = likeCard,
-  showImagePopupCallback = showImagePopup,
 ) {
 
   const cardElement = cardTemplate.cloneNode(true);
@@ -19,7 +17,7 @@ export function createCard(
   
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
-  cardImage.addEventListener('click', showImagePopupCallback);
+  cardImage.addEventListener('click', showImagePopup);
 
   cardDeleteButton.addEventListener('click', (event) => {
     const cardToDelete = event.target.closest('.card');

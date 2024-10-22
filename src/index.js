@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { createCard, deleteCard } from './scripts/card.js';
+import { createCard } from './scripts/card.js';
 import { openModal, closeModal } from './scripts/modal.js';
 import { initialCards } from './scripts/cards.js';
 
@@ -56,28 +56,31 @@ addCardButton.addEventListener('click', () => {
   openModal(addCardPopup);
 });
 
-export function showImagePopup(event) {
+function showImagePopup(event) {
   openModal(imagePopup);
   imagePopupFullSize.setAttribute('src', event.target.src);
   imagePopupFullSize.setAttribute('alt', event.target.alt);
   imagePopupCaption.textContent = event.target.alt;
 }
 
-function handleFormSubmit(event) {
+function handleProfileFormSubmit(event) {
   event.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closeModal(editPopup);
 }
 
-formElement.addEventListener('submit', handleFormSubmit);
+formElement.addEventListener('submit', handleProfileFormSubmit);
 
 function addCard(event) {
   event.preventDefault();
-  const cardElement = createCard({
-    name: cardNameInput.value,
-    link: cardLinkInput.value,
-  });
+  const cardElement = createCard(
+    {
+      name: cardNameInput.value,
+      link: cardLinkInput.value,
+    },
+    showImagePopup,
+  );
   cardsContainer.prepend(cardElement);
   cardAddForm.reset();
   closeModal(addCardPopup);
@@ -86,6 +89,6 @@ function addCard(event) {
 cardAddForm.addEventListener('submit', addCard);
 
 initialCards.forEach((cardData) => {
-  const cardElement = createCard(cardData, deleteCard);
+  const cardElement = createCard(cardData, showImagePopup);
   cardsContainer.appendChild(cardElement);
 });
