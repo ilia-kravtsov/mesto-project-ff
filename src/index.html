@@ -21,6 +21,7 @@
       <main class="content">
         <section class="profile page__section">
           <div class="profile__image-container">
+            <div class="profile__image-overlay"></div>
             <img
               src="<%=require('./images/avatar.jpg')%>"
               alt="Главное фото профиля"
@@ -49,17 +50,29 @@
             <input
               type="text"
               name="name"
+              id="name"
               class="popup__input popup__input_type_name"
               placeholder="Имя"
               required
+              minlength="2"
+              maxlength="40"
+              pattern="^[a-zA-Zа-яА-Я\sёЁ\-]+$"
+              data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
+            <span class="popup__input-error name-error"></span>
             <input
               type="text"
               name="description"
+              id="position"
               class="popup__input popup__input_type_description"
               placeholder="Занятие"
               required
+              minlength="2"
+              maxlength="200"
+              pattern="^[a-zA-Zа-яА-Я\sёЁ\-]+$"
+              data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
+            <span class="popup__input-error position-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -74,17 +87,25 @@
             <input
               type="text"
               name="place-name"
+              id="place-input"
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
               required
+              minlength="2"
+              maxlength="30"
+              pattern="^[a-zA-Zа-яА-Я\sёЁ\-]+$"
+              data-error-message="Разрешены только латинские и кириллические буквы, знаки дефиса и пробелы."
             />
+            <span class="popup__input-error place-input-error"></span>
             <input
               type="url"
               name="link"
+              id="link-input"
               class="popup__input popup__input_type_url"
               placeholder="Ссылка на картинку"
               required
             />
+            <span class="popup__input-error link-input-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -100,13 +121,56 @@
       </div>
     </div>
 
+    <div class="popup popup_type_delete">
+      <div class="popup__content popup__delete">
+        <button
+            type="button"
+            class="popup__close"
+            aria-label="Close"
+        ></button>
+        <h3 class="popup__title">Вы уверены?</h3>
+        <form class="popup__form" name="delete-card">
+          <button type="submit" class="button popup__button">Да</button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup popup_type_avatar">
+      <div class="popup__content popup__avatar">
+        <button
+          type="button"
+          class="popup__close"
+          aria-label="Закрыть"
+        ></button>
+        <h3 class="popup__title">Обновить аватар</h3>
+        <form class="popup__form" name="change-avatar" novalidate>
+          <input
+            type="url"
+            name="link"
+            class="popup__input popup__input_type_url"
+            id="avatar-url"
+            placeholder="Введиите ссылку на аватар"
+            required
+          />
+          <span class="popup__input-error avatar-url-error"></span>
+          <button type="submit" class="button popup__button">
+            Сохранить
+          </button>
+        </form>
+      </div>
+    </div>
+
     <template id="card-template">
       <li class="places__item card">
         <img class="card__image" src="" alt="" />
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button type="button" class="card__like-button"></button>
+          <div class="card__like-container">
+            <button type="button" class="card__like-button" aria-label="Like"></button>
+            <span class="card__like-count">0</span>
+          </div>
         </div>
       </li>
     </template>
