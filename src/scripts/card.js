@@ -14,19 +14,17 @@ function likeCard(likeButton, likeCounter, cardId) {
           likeCounter.textContent = cardData.likes.length;
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   }
 }
 
-export function createCard(
+export function createCard({
   cardData,
   showImagePopup,
   profileId,
-  openDeletePopup,
+  openDeleteConfirmationPopup,
   likeCardCallback = likeCard,
-) {
+}) {
   const cardElement = cardTemplate.cloneNode(true);
   const cardTitle = cardElement.querySelector('.card__title');
   const cardImage = cardElement.querySelector('.card__image');
@@ -35,14 +33,12 @@ export function createCard(
   const cardDeleteButton = cardElement.querySelector('.card__delete-button');
 
   const cardId = cardData._id;
-
   likeCounter.textContent = cardData.likes.length;
-
   cardTitle.textContent = cardData.name;
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
-  cardImage.addEventListener('click', showImagePopup);
 
+  cardImage.addEventListener('click', showImagePopup);
   const isLiked = cardData.likes.some((like) => like._id === profileId);
 
   if (isLiked) {
@@ -50,11 +46,7 @@ export function createCard(
   }
 
   likeButton.addEventListener('click', () => {
-    likeCard(likeButton, likeCounter, cardId);
-  });
-
-  likeButton.addEventListener('click', () => {
-    likeCardCallback(likeButton);
+    likeCardCallback(likeButton, likeCounter, cardId);
   });
 
   if (cardData.owner._id !== profileId) {
@@ -63,7 +55,7 @@ export function createCard(
     cardDeleteButton.addEventListener('click', () => {
       currentCardId = cardId;
       currentDeleteButton = cardDeleteButton;
-      openDeletePopup();
+      openDeleteConfirmationPopup();
     });
   }
 

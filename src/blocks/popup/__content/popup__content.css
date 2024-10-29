@@ -1,11 +1,24 @@
 .popup__content {
   max-width: 430px;
+  min-height: 330px;
   width: 100%;
   background-color: #fff;
   border-radius: 10px;
   position: relative;
   box-sizing: border-box;
   padding: 34px 36px;
+}
+
+.popup__avatar {
+  min-height: 272px;
+}
+
+.popup__delete {
+  min-height: 181px;
+}
+
+.popup__input_avatar-link {
+  margin-block-start: 10px;
 }
 
 @media screen and (max-width: 568px) {

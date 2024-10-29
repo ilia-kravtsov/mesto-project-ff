@@ -14,120 +14,70 @@ async function checkResponse(response) {
   return response.json();
 }
 
-export async function getUserInfo() {
-  try {
-    const response = await fetch(`${config.baseUrl}/users/me`, {
-      headers: config.headers,
-    });
-    return await checkResponse(response);
-  } catch (error) {
-    console.error('Failed to fetch user info:', error);
-  }
+function request(endpoint, options = {}) {
+  return fetch(`${config.baseUrl}${endpoint}`, {
+    headers: config.headers,
+    ...options,
+  }).then(checkResponse)
 }
 
-export async function getInitialCards() {
-  try {
-    const response = await fetch(`${config.baseUrl}/cards`, {
-      headers: config.headers,
-    });
-    return await checkResponse(response);
-  } catch (error) {
-    console.error('Failed to fetch initial cards:', error);
-  }
+export function getUserInfo() {
+  return request('/users/me');
 }
 
-export async function editProfile(nameValue, jobValue) {
-  try {
-    const response = await fetch(`${config.baseUrl}/users/me`, {
-      method: 'PATCH',
-      headers: config.headers,
-      body: JSON.stringify({
-        name: nameValue,
-        about: jobValue,
-      }),
-    });
-    return await checkResponse(response);
-  } catch (error) {
-    console.error('Failed to edit profile:', error);
-  }
+export function getInitialCards() {
+  return request('/cards');
 }
 
-export async function addCard(nameValue, linkValue) {
-  try {
-    const response = await fetch(`${config.baseUrl}/cards`, {
-      method: 'POST',
-      headers: config.headers,
-      body: JSON.stringify({
-        name: nameValue,
-        link: linkValue,
-      }),
-    });
-    return await checkResponse(response);
-  } catch (error) {
-    console.error('Failed to add card:', error);
-  }
+export function editProfile(nameValue, jobValue) {
+  return request('/users/me', {
+    method: 'PATCH',
+    body: JSON.stringify({
+      name: nameValue,
+      about: jobValue,
+    }),
+  });
 }
 
-export async function deleteCard(cardId) {
-  try {
-    const response = await fetch(`${config.baseUrl}/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: config.headers,
-    });
-    return await checkResponse(response);
-  } catch (error) {
-    console.error('Failed to delete card:', error);
-  }
+export function addCard(nameValue, linkValue) {
+  return request('/cards', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: nameValue,
+      link: linkValue,
+    }),
+  });
 }
 
-export async function changeLikeStatus(cardId, isLiked) {
-  try {
-    const response = await fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-      method: isLiked ? 'DELETE' : 'PUT',
-      headers: config.headers,
-    });
-    return await checkResponse(response);
-  } catch (error) {
-    console.error('Failed to change like status:', error);
-  }
+export function deleteCard(cardId) {
+  return request(`/cards/${cardId}`, {
+    method: 'DELETE',
+  });
 }
 
-export async function changeAvatar(avatarLink) {
-  try {
-    const response = await fetch(`${config.baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: config.headers,
-      body: JSON.stringify({
-        avatar: avatarLink,
-      }),
-    });
-    return await checkResponse(response);
-  } catch (error) {
-    console.error('Failed to change avatar:', error);
-  }
+export function changeLikeStatus(cardId, isLiked) {
+  return request(`/cards/likes/${cardId}`, {
+    method: isLiked ? 'DELETE' : 'PUT',
+  });
 }
 
-export async function validateImageUrl(url) {
-  try {
-    // eсли выстраивать запрос как требуется в задании, то встретимся c CORS
-    // поэтому провалидировал то, что можно провалидировать с mode: 'no-cors'
-    // так встретим CORS:
-    // const response = await fetch(url, { method: 'HEAD' });
-    // if (response.ok && response.headers.get('Content-Type')?.startsWith('image/')) {
-    //   return true;
-    // }
-    const urlPattern = /\.(jpeg|jpg|gif|png)$/i;
-    if (!urlPattern.test(url)) {
-      console.error('Неверный формат URL изображения');
-    }
-    const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
-    if (response.ok) {
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error('Ошибка при проверке URL:', error);
-    return false;
-  }
+export function changeAvatar(avatarLink) {
+  return request('/users/me/avatar', {
+    method: 'PATCH',
+    body: JSON.stringify({
+      avatar: avatarLink,
+    }),
+  });
 }
+
+export function validateImageUrl(url) {
+  const urlPattern = /\.(jpeg|jpg|gif|png)$/i;
+  if (!urlPattern.test(url)) {
+    console.error('Неверный формат URL изображения');
+    return Promise.reject('Invalid image URL format');
+  }
+  return fetch(url, { method: 'HEAD', mode: 'no-cors' })
+    .then((response) => response.ok)
+}
+
 

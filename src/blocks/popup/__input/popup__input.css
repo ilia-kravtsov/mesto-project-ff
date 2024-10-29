@@ -7,7 +7,7 @@
   line-height: 18px;
   box-sizing: border-box;
   padding: 10px 0 0;
-  margin-block-end: 10px;
+  max-block-size: 28px;
 }
 
 .popup__input:last-of-type {
@@ -19,7 +19,7 @@
 }
 
 .popup__input:focus-visible {
-  outline: 2px solid #470fe19d;
+  outline: 3px solid #470fe19d;
   border-radius: 1px;
   outline-offset: 1px;
 }
@@ -33,8 +33,16 @@
   color: #f00;
   font-size: 12px;
   margin-block-start: 5px;
+  min-height: 28px;
 }
 
+.popup__input-error:last-of-type {
+  margin-bottom: 0;
+}
+
+.popup__error_visible {
+  display: block;
+}
 
 @media screen and (max-width: 568px) {
   .popup__title {

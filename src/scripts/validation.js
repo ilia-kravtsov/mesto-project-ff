@@ -55,14 +55,14 @@ export function enableValidation(config = validationConfig) {
 function disableButton(button, inactivateClass) {
   button.classList.add(inactivateClass);
   button.disabled = true;
-};
+}
 
 function toggleButtonState(inputList, buttonElement, inactiveButtonClass) {
-  if (inputList.some((inputElement) => !inputElement.validity.valid)) {
-    disableButton(buttonElement, inactiveButtonClass);
-  } else {
+  if (inputList.every((inputElement) => inputElement.validity.valid)) {
     buttonElement.classList.remove(inactiveButtonClass);
     buttonElement.disabled = false;
+  } else {
+    disableButton(buttonElement, inactiveButtonClass);
   }
 }
 
